@@ -10,12 +10,12 @@
         }
     ],
     "require": {
-        "php": "^7.3.1",
+        "php": "^7.2",
         "ext-curl": "*",
         "ext-json": "*",
-        "myclabs/php-enum": "^1.5",
-        "vlucas/phpdotenv": "^2.2",
-        "californiamountainsnake/php-utils": "^1.0.1"
+        "myclabs/php-enum": "~1.5",
+        "vlucas/phpdotenv": "~3.4",
+        "californiamountainsnake/php-utils": "~1.0.1"
     },
     "require-dev": {
         "ext-dom": "*",

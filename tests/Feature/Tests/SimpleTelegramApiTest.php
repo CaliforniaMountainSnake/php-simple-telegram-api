@@ -25,9 +25,10 @@ class SimpleTelegramApiTest extends FeatureTestCase
      */
     public function testSendMessage(): void
     {
-        $arr = $this->simpleApi->sendMessage($this->simpleApi->getBotToken(), \getenv('TEST_CHANNEL_USERNAME'),
+        $arr = $this->simpleApi->sendMessage($this->simpleApi->getBotToken(), '@' . \getenv('TEST_CHANNEL_USERNAME'),
             'test from lib!');
-        $this->assertIsArray($arr);
 
+        $this->assertIsArray($arr);
+        $this->assertArrayHasKey('result', $arr);
     }
 }

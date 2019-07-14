@@ -17,7 +17,7 @@ class FeatureTestCase extends TestCase
     {
         parent::setUp();
 
-        $dotenv = new Dotenv(__DIR__);
+        $dotenv = Dotenv::create(__DIR__);
         $dotenv->load();
     }
 }
