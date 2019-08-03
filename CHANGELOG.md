@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [1.2.1] - 2019-08-03
+### Added
+- Added the SimpleTelegramApi::getMe() method.
+
 ## [1.2.0] - 2019-07-14
 ### Added
 - Added this changelog.

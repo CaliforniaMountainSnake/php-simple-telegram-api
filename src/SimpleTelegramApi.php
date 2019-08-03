@@ -57,6 +57,19 @@ class SimpleTelegramApi
     }
 
     /**
+     * A simple method for testing your bot's auth token. Requires no parameters.
+     * Returns basic information about the bot in form of a User object.
+     *
+     * @param string $_bot_token
+     * @return array
+     * @throws TelegramWrongResponseException
+     */
+    public function getMe(string $_bot_token): array
+    {
+        return $this->sendQuery($_bot_token, 'getMe', []);
+    }
+
+    /**
      * @param string $_bot_token
      * @param string $_chat_id
      * @param string $_message_id
