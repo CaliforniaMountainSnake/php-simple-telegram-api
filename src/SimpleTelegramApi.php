@@ -65,10 +65,10 @@ class SimpleTelegramApi
 
     /**
      * @param string $_bot_token
-     * @return array
+     * @return string
      * @throws TelegramWrongResponseException
      */
-    public function getBotUsername(string $_bot_token): array
+    public function getBotUsername(string $_bot_token): string
     {
         return $this->getMe($_bot_token)['result']['username'];
     }

@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [1.2.3] - 2019-08-04
+### Fixed
+- Fixed the bug.
+
 ## [1.2.2] - 2019-08-04
 ### Added
 - Added the SimpleTelegramApi::getBotUsername() and SimpleTelegramApi::getChat() methods.
