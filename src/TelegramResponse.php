@@ -66,6 +66,24 @@ class TelegramResponse implements \Countable, \ArrayAccess
     }
 
     //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string)\json_encode($this->container);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->container;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     // Realisation of interfaces.
     //------------------------------------------------------------------------------------------------------------------
 

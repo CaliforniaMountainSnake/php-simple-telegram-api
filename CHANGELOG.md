@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [2.0.1] - 2019-08-28
+### Added
+- Added the methods of TelegramResponse: __toString() and toArray().
+
 ## [2.0.0] - 2019-08-28
 ### Added
 - !!! Each api method now returns the TelegramResponse object.
