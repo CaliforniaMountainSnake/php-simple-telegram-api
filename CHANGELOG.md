@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [2.0.0] - 2019-08-28
+### Added
+- !!! Each api method now returns the TelegramResponse object.
+- Added a method SimpleTelegramApi::sendMediafile() intended to send a various types of media files.
+- SimpleTelegramApi class also include the SendMediafilesMethods trait contains the sendPhoto, sendAudio, sendVoice, sendDocument, sendVideo, sendAnimation, sendVideoNote methods.
+- Added the sendChatAction, sendPoll api methods.
+### Changed
+- !!! SimpleTelegramApi::sendQuery() method now throws the TelegramWrongResponseException if telegram response was failed.
+- !!! ParseModeEnum class moved into the Enums namespace.
+- The parameter $_postfields in the SimpleTelegramApi::sendQuery() method is optional now.
+- The version of library californiamountainsnake/php-utils has been increased to ~1.0.2.
+
 ## [1.2.3] - 2019-08-04
 ### Fixed
 - Fixed the bug.

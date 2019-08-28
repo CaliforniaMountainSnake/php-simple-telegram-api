@@ -15,7 +15,7 @@
         "ext-json": "*",
         "myclabs/php-enum": "~1.5",
         "vlucas/phpdotenv": "~3.4",
-        "californiamountainsnake/php-utils": "~1.0.1"
+        "californiamountainsnake/php-utils": "~1.0.2"
     },
     "require-dev": {
         "ext-dom": "*",

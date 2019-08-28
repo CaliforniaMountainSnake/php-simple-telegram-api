@@ -1,13 +1,13 @@
 <?php
 
-namespace CaliforniaMountainSnake\SocialNetworksAPI\Telegram;
+namespace CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums;
 
 use MyCLabs\Enum\Enum;
 
 class ParseModeEnum extends Enum
 {
     public const MARKDOWN = 'markdown';
-    public const HTML     = 'html';
+    public const HTML = 'html';
     public const STANDARD = '';
 
     //--------------------------------------------------------------------------
