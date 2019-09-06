@@ -3,7 +3,7 @@
 namespace CaliforniaMountainSnake\SocialNetworksAPI\Telegram;
 
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\ParseModeEnum;
-use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramMediafileTypesEnum;
+use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramInputMediaTypesEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\ParseModeUtils;
 
 class InputMedia
@@ -16,7 +16,7 @@ class InputMedia
     public const MEDIAFILE_FIELD = 'mediafile';
 
     /**
-     * @var TelegramMediafileTypesEnum
+     * @var TelegramInputMediaTypesEnum
      */
     protected $type;
 
@@ -33,13 +33,13 @@ class InputMedia
     /**
      * InputMedia constructor.
      *
-     * @param TelegramMediafileTypesEnum $type
-     * @param \CURLFile|string           $media
-     * @param string|null                $caption
-     * @param ParseModeEnum|null         $_parse_mode
+     * @param TelegramInputMediaTypesEnum $type
+     * @param \CURLFile|string            $media
+     * @param string|null                 $caption
+     * @param ParseModeEnum|null          $_parse_mode
      */
     public function __construct(
-        TelegramMediafileTypesEnum $type,
+        TelegramInputMediaTypesEnum $type,
         $media,
         ?string $caption = null,
         ?ParseModeEnum $_parse_mode = null
@@ -92,9 +92,9 @@ class InputMedia
     //------------------------------------------------------------------------------------------------------------------
 
     /**
-     * @return TelegramMediafileTypesEnum
+     * @return TelegramInputMediaTypesEnum
      */
-    public function getType(): TelegramMediafileTypesEnum
+    public function getType(): TelegramInputMediaTypesEnum
     {
         return $this->type;
     }

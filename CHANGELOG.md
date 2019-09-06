@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [2.0.3] - 2019-09-06
+### Added
+- Added the method SimpleTelegramApi::editMessageText().
+### Changed
+- Some fixes with enums.
+
 ## [2.0.2] - 2019-09-06
 ### Added
 - Added the method SimpleTelegramApi::editMessageMedia().

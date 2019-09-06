@@ -294,6 +294,40 @@ class SimpleTelegramApi
     //------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Use this method to edit text and game messages.
+     * On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
+     *
+     * @param string             $_bot_token
+     * @param string             $_chat_id
+     * @param string             $_message_id
+     * @param string             $_text
+     * @param ParseModeEnum|null $_parse_mode
+     * @param string|null        $_reply_markup_json
+     *
+     * @return TelegramResponse
+     * @throws TelegramWrongResponseException
+     */
+    public function editMessageText(
+        string $_bot_token,
+        string $_chat_id,
+        string $_message_id,
+        string $_text,
+        ?ParseModeEnum $_parse_mode = null,
+        ?string $_reply_markup_json = null
+    ): TelegramResponse {
+        $params = [
+            'chat_id' => $_chat_id,
+            'message_id' => $_message_id,
+            'text' => $_text,
+            'parse_mode' => (string)($_parse_mode ?? $this->getParseMode())
+        ];
+
+        $_reply_markup_json !== null && $params['reply_markup'] = $_reply_markup_json;
+
+        return $this->sendQuery($_bot_token, self::EDIT_MESSAGE_TEXT, $params);
+    }
+
+    /**
      * Use this method to edit animation, audio, document, photo, or video messages.
      * If a message is a part of a message album, then it can be edited only to a photo or a video.
      * Otherwise, message type can be changed arbitrarily. When inline message is edited, new file can't be uploaded.
@@ -339,7 +373,7 @@ class SimpleTelegramApi
      * @param array  $_postfields
      *
      * @return TelegramResponse Telegram response.
-     * @throws TelegramWrongResponseException Throws in case if it's impossible to parse the Telegram response.
+     * @throws TelegramWrongResponseException
      */
     public function sendQuery(string $_bot_token, string $_method, array $_postfields = []): TelegramResponse
     {
