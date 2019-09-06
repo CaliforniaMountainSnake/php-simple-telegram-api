@@ -6,6 +6,7 @@ use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\ParseModeEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramChatActionsEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramMediafileTypesEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Exceptions\TelegramWrongResponseException;
+use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\ParseModeUtils;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\SendMediafilesMethods;
 use CaliforniaMountainSnake\UtilTraits\Curl\CurlUtils;
 
@@ -16,12 +17,12 @@ class SimpleTelegramApi
 {
     use CurlUtils;
     use SendMediafilesMethods;
+    use ParseModeUtils;
 
     public const TELEGRAM_BOT_API_URL = 'https://api.telegram.org/bot';
     public const GET_ME = 'getMe';
     public const GET_CHAT = 'getChat';
     public const GET_CHAT_MEMBER = 'getChatMember';
-    public const DELETE_MESSAGE = 'deleteMessage';
     public const SET_WEBHOOK = 'setWebhook';
     public const SEND_MESSAGE = 'sendMessage';
     public const SEND_PHOTO = 'sendPhoto';
@@ -33,11 +34,12 @@ class SimpleTelegramApi
     public const SEND_VIDEO_NOTE = 'sendVideoNote';
     public const SEND_POLL = 'sendPoll';
     public const SEND_CHAT_ACTION = 'sendChatAction';
-
-    /**
-     * @var ParseModeEnum
-     */
-    protected $defaultParseMode;
+    public const EDIT_MESSAGE_TEXT = 'editMessageText';
+    public const EDIT_MESSAGE_CAPTION = 'editMessageCaption';
+    public const EDIT_MESSAGE_MEDIA = 'editMessageMedia';
+    public const EDIT_MESSAGE_REPLY_MARKUP = 'editMessageReplyMarkup';
+    public const STOP_POLL = 'stopPoll';
+    public const DELETE_MESSAGE = 'deleteMessage';
 
     /**
      * SimpleTelegramApi constructor.
@@ -46,25 +48,7 @@ class SimpleTelegramApi
      */
     public function __construct(?ParseModeEnum $_default_parse_mode = null)
     {
-        $this->defaultParseMode = $_default_parse_mode ?? ParseModeEnum::HTML();
-    }
-
-    /**
-     * Parse mode, used in the all methods by default.
-     *
-     * @return ParseModeEnum
-     */
-    public function getDefaultParseMode(): ParseModeEnum
-    {
-        return $this->defaultParseMode;
-    }
-
-    /**
-     * @param ParseModeEnum $_parse_mode
-     */
-    public function setDefaultParseMode(ParseModeEnum $_parse_mode): void
-    {
-        $this->defaultParseMode = $_parse_mode;
+        $this->parseMode = $_default_parse_mode;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -264,7 +248,7 @@ class SimpleTelegramApi
         $params = [
             'chat_id' => $_chat_id,
             'text' => $_text,
-            'parse_mode' => (string)($_parse_mode ?? $this->getDefaultParseMode())
+            'parse_mode' => (string)($_parse_mode ?? $this->getParseMode())
         ];
 
         $_reply_markup_json !== null && $params['reply_markup'] = $_reply_markup_json;
@@ -298,13 +282,51 @@ class SimpleTelegramApi
         $params = [
             'chat_id' => $_chat_id,
             (string)$_type => $_mediafile,
-            'parse_mode' => (string)($_parse_mode ?? $this->getDefaultParseMode())
+            'parse_mode' => (string)($_parse_mode ?? $this->getParseMode())
         ];
 
         $_caption !== null && $params['caption'] = $_caption;
         $_reply_markup_json !== null && $params['reply_markup'] = $_reply_markup_json;
 
         return $this->sendQuery($_bot_token, 'send' . \ucfirst((string)$_type), $params);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Use this method to edit animation, audio, document, photo, or video messages.
+     * If a message is a part of a message album, then it can be edited only to a photo or a video.
+     * Otherwise, message type can be changed arbitrarily. When inline message is edited, new file can't be uploaded.
+     * Use previously uploaded file via its file_id or specify a URL.
+     * On success, if the edited message was sent by the bot, the edited Message is returned, otherwise True is returned.
+     *
+     * @param string      $_bot_token
+     * @param string      $_chat_id
+     * @param string      $_message_id
+     * @param InputMedia  $_input_media
+     * @param string|null $_reply_markup_json
+     *
+     * @return TelegramResponse
+     * @throws TelegramWrongResponseException
+     */
+    public function editMessageMedia(
+        string $_bot_token,
+        string $_chat_id,
+        string $_message_id,
+        InputMedia $_input_media,
+        ?string $_reply_markup_json = null
+    ): TelegramResponse {
+        $params = [
+            'chat_id' => $_chat_id,
+            'message_id' => $_message_id,
+            'media' => $_input_media->toJson(),
+        ];
+
+        $rawMedia = $_input_media->getMedia();
+        $rawMedia instanceof \CURLFile && $params[InputMedia::MEDIAFILE_FIELD] = $rawMedia;
+        $_reply_markup_json !== null && $params['reply_markup'] = $_reply_markup_json;
+
+        return $this->sendQuery($_bot_token, self::EDIT_MESSAGE_MEDIA, $params);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -338,7 +360,8 @@ class SimpleTelegramApi
         $response = new TelegramResponse($telegramResponseJson);
         if (!$response->isOk()) {
             throw new TelegramWrongResponseException('Telegram request failed! Description: "'
-                . $response->getDescription() . '". Error code: ' . $response->getErrorCode());
+                . $response->getDescription() . '". Error code: ' . $response->getErrorCode(),
+                $response->getErrorCode());
         }
 
         return $response;

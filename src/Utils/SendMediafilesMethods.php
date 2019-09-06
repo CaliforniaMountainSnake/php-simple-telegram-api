@@ -9,11 +9,6 @@ use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\TelegramResponse;
 trait SendMediafilesMethods
 {
     /**
-     * @return ParseModeEnum
-     */
-    abstract public function getDefaultParseMode(): ParseModeEnum;
-
-    /**
      * Use this method to send a various types of the media files.
      *
      * @param string                     $_bot_token
