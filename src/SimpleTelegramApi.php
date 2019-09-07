@@ -6,7 +6,7 @@ use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\ParseModeEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramChatActionsEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramMediafileTypesEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Exceptions\TelegramWrongResponseException;
-use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\ParseModeUtils;
+use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\IncludeParseMode;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\SendMediafilesMethods;
 use CaliforniaMountainSnake\UtilTraits\Curl\CurlUtils;
 
@@ -17,7 +17,7 @@ class SimpleTelegramApi
 {
     use CurlUtils;
     use SendMediafilesMethods;
-    use ParseModeUtils;
+    use IncludeParseMode;
 
     public const TELEGRAM_BOT_API_URL = 'https://api.telegram.org/bot';
     public const GET_ME = 'getMe';
@@ -356,7 +356,7 @@ class SimpleTelegramApi
             'media' => $_input_media->toJson(),
         ];
 
-        $rawMedia = $_input_media->getMedia();
+        $rawMedia = $_input_media->getMediafile();
         $rawMedia instanceof \CURLFile && $params[InputMedia::MEDIAFILE_FIELD] = $rawMedia;
         $_reply_markup_json !== null && $params['reply_markup'] = $_reply_markup_json;
 

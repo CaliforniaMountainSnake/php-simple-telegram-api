@@ -4,7 +4,7 @@ namespace CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils;
 
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\ParseModeEnum;
 
-trait ParseModeUtils
+trait IncludeParseMode
 {
     /**
      * @var ParseModeEnum

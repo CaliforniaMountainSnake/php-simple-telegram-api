@@ -4,11 +4,11 @@ namespace CaliforniaMountainSnake\SocialNetworksAPI\Telegram;
 
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\ParseModeEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramInputMediaTypesEnum;
-use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\ParseModeUtils;
+use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\IncludeParseMode;
 
 class InputMedia
 {
-    use ParseModeUtils;
+    use IncludeParseMode;
 
     /**
      * The field in which must be the mediafile if it is instance of \CURLFile.
@@ -23,7 +23,7 @@ class InputMedia
     /**
      * @var \CURLFile|string
      */
-    protected $media;
+    protected $mediafile;
 
     /**
      * @var string|null
@@ -33,21 +33,21 @@ class InputMedia
     /**
      * InputMedia constructor.
      *
-     * @param TelegramInputMediaTypesEnum $type
-     * @param \CURLFile|string            $media
-     * @param string|null                 $caption
+     * @param TelegramInputMediaTypesEnum $_type
+     * @param \CURLFile|string            $_mediafile
+     * @param string|null                 $_caption
      * @param ParseModeEnum|null          $_parse_mode
      */
     public function __construct(
-        TelegramInputMediaTypesEnum $type,
-        $media,
-        ?string $caption = null,
+        TelegramInputMediaTypesEnum $_type,
+        $_mediafile,
+        ?string $_caption = null,
         ?ParseModeEnum $_parse_mode = null
     ) {
-        $this->type = $type;
-        $this->media = $media;
-        $this->caption = $caption;
-        $this->parseMode = $_parse_mode;
+        $this->type = $_type;
+        $this->mediafile = $_mediafile;
+        $this->caption = $_caption;
+        $this->parseMode = $_parse_mode ?? ParseModeEnum::HTML();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -75,20 +75,22 @@ class InputMedia
     {
         $arr = [
             'type' => (string)$this->type,
-            'media' => $this->media,
-            'parse_mode' => (string)$this->getParseMode(),
+            'media' => $this->mediafile,
         ];
 
-        if ($this->media instanceof \CURLFile) {
+        if ($this->mediafile instanceof \CURLFile) {
             $arr['media'] = 'attach://' . self::MEDIAFILE_FIELD;
         }
         if ($this->caption !== null) {
             $arr['caption'] = $this->caption;
+            $arr['parse_mode'] = (string)$this->getParseMode();
         }
 
         return $arr;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Getters.
     //------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -102,9 +104,9 @@ class InputMedia
     /**
      * @return \CURLFile|string
      */
-    public function getMedia()
+    public function getMediafile()
     {
-        return $this->media;
+        return $this->mediafile;
     }
 
     /**
@@ -113,5 +115,33 @@ class InputMedia
     public function getCaption(): ?string
     {
         return $this->caption;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Setters.
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @param TelegramInputMediaTypesEnum $type
+     */
+    public function setType(TelegramInputMediaTypesEnum $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param \CURLFile|string $mediafile
+     */
+    public function setMediafile($mediafile): void
+    {
+        $this->mediafile = $mediafile;
+    }
+
+    /**
+     * @param string|null $caption
+     */
+    public function setCaption(?string $caption): void
+    {
+        $this->caption = $caption;
     }
 }
