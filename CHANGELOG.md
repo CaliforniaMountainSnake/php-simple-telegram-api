@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [2.0.6] - 2019-09-08
+### Added
+- Added the MessageEntitiesUtils trait with method getTelegramMessageTextWithEntities() allows to covert message entities to html (or other preset), if the message contains text/caption with entities.
+### Changed
+- Updated composer dependencies.
+
 ## [2.0.5] - 2019-09-08
 ### Added
 - Added the MessageEntityTypesEnum class represents the type of one special entity in a text message. For example, hashtags, usernames, URLs, etc.

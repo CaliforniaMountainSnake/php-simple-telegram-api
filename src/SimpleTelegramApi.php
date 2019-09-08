@@ -7,6 +7,7 @@ use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramChatActions
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramMediafileTypesEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Exceptions\TelegramWrongResponseException;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\IncludeParseMode;
+use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\MessageEntitiesUtils;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\SendMediafilesMethods;
 use CaliforniaMountainSnake\UtilTraits\Curl\CurlUtils;
 
@@ -18,6 +19,7 @@ class SimpleTelegramApi
     use CurlUtils;
     use SendMediafilesMethods;
     use IncludeParseMode;
+    use MessageEntitiesUtils;
 
     public const TELEGRAM_BOT_API_URL = 'https://api.telegram.org/bot';
     public const GET_ME = 'getMe';

@@ -13,6 +13,7 @@
         "php": "^7.2",
         "ext-curl": "*",
         "ext-json": "*",
+        "ext-mbstring": "*",
         "myclabs/php-enum": "~1.5",
         "vlucas/phpdotenv": "~3.4",
         "californiamountainsnake/php-utils": "~1.0.2"
