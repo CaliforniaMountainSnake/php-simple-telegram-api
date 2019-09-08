@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [2.0.5] - 2019-09-08
+### Added
+- Added the MessageEntityTypesEnum class represents the type of one special entity in a text message. For example, hashtags, usernames, URLs, etc.
+
 ## [2.0.4] - 2019-09-07
 ### Changed
 - Some changes with methods' signatures.
