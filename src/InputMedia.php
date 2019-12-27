@@ -107,7 +107,7 @@ class InputMedia
      */
     public static function injectIntoQuery(array &$_params, string $_param_name, InputMedia ...$_mediafiles): void
     {
-        $mediaJsons = [];
+        $mediafilesArray = [];
         foreach ($_mediafiles as $mediafile) {
             $rawMedia = $mediafile->getMediafile();
 
@@ -116,14 +116,15 @@ class InputMedia
                 $_params[$mediafile->getAttachMediafileField()] = $rawMedia;
             }
 
-            // Add mediafile's json to array.
-            $mediaJsons[] = $mediafile->toJson();
+            $mediafilesArray[] = $mediafile->toArray();
         }
 
-        $_params[$_param_name] = $mediaJsons;
-        if (count($mediaJsons) === 1) {
-            $_params[$_param_name] = $mediaJsons[0];
+        if (count($mediafilesArray) === 1) {
+            $_params[$_param_name] = \json_encode($mediafilesArray[0]);
+            return;
         }
+
+        $_params[$_param_name] = \json_encode($mediafilesArray);
     }
 
     //------------------------------------------------------------------------------------------------------------------
