@@ -36,6 +36,7 @@ class SimpleTelegramApi
     public const SEND_VIDEO_NOTE = 'sendVideoNote';
     public const SEND_POLL = 'sendPoll';
     public const SEND_CHAT_ACTION = 'sendChatAction';
+    public const SEND_MEDIA_GROUP = 'sendMediaGroup';
     public const EDIT_MESSAGE_TEXT = 'editMessageText';
     public const EDIT_MESSAGE_CAPTION = 'editMessageCaption';
     public const EDIT_MESSAGE_MEDIA = 'editMessageMedia';
@@ -293,6 +294,30 @@ class SimpleTelegramApi
         return $this->sendQuery($_bot_token, 'send' . \ucfirst((string)$_type), $params);
     }
 
+    /**
+     * Use this method to send a group of photos or videos as an album.
+     * On success, an array of the sent Messages is returned.
+     *
+     * @param string       $_bot_token
+     * @param string       $_chat_id
+     * @param InputMedia[] $_mediafiles
+     *
+     * @return TelegramResponse
+     * @throws TelegramWrongResponseException
+     */
+    public function sendMediaGroup(
+        string $_bot_token,
+        string $_chat_id,
+        array $_mediafiles
+    ): TelegramResponse {
+        $params = [
+            'chat_id' => $_chat_id,
+        ];
+        InputMedia::injectIntoQuery($params, 'media', ...$_mediafiles);
+
+        return $this->sendQuery($_bot_token, self::SEND_MEDIA_GROUP, $params);
+    }
+
     //------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -355,11 +380,9 @@ class SimpleTelegramApi
         $params = [
             'chat_id' => $_chat_id,
             'message_id' => $_message_id,
-            'media' => $_input_media->toJson(),
         ];
+        InputMedia::injectIntoQuery($params, 'media', $_input_media);
 
-        $rawMedia = $_input_media->getMediafile();
-        $rawMedia instanceof \CURLFile && $params[InputMedia::MEDIAFILE_FIELD] = $rawMedia;
         $_reply_markup_json !== null && $params['reply_markup'] = $_reply_markup_json;
 
         return $this->sendQuery($_bot_token, self::EDIT_MESSAGE_MEDIA, $params);

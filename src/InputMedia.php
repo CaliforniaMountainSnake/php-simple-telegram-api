@@ -5,6 +5,7 @@ namespace CaliforniaMountainSnake\SocialNetworksAPI\Telegram;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\ParseModeEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Enums\TelegramInputMediaTypesEnum;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Utils\IncludeParseMode;
+use CURLFile;
 
 class InputMedia
 {
@@ -13,7 +14,7 @@ class InputMedia
     /**
      * The field in which must be the mediafile if it is instance of \CURLFile.
      */
-    public const MEDIAFILE_FIELD = 'mediafile';
+    public const DEFAULT_MEDIAFILE_FIELD = 'mediafile';
 
     /**
      * @var TelegramInputMediaTypesEnum
@@ -21,7 +22,7 @@ class InputMedia
     protected $type;
 
     /**
-     * @var \CURLFile|string
+     * @var CURLFile|string
      */
     protected $mediafile;
 
@@ -31,23 +32,31 @@ class InputMedia
     protected $caption;
 
     /**
+     * @var string
+     */
+    protected $attachMediafileField;
+
+    /**
      * InputMedia constructor.
      *
      * @param TelegramInputMediaTypesEnum $_type
-     * @param \CURLFile|string            $_mediafile
+     * @param CURLFile|string             $_mediafile
      * @param string|null                 $_caption
      * @param ParseModeEnum|null          $_parse_mode
+     * @param string|null                 $_attach_mediafile_field
      */
     public function __construct(
         TelegramInputMediaTypesEnum $_type,
         $_mediafile,
         ?string $_caption = null,
-        ?ParseModeEnum $_parse_mode = null
+        ?ParseModeEnum $_parse_mode = null,
+        ?string $_attach_mediafile_field = null
     ) {
         $this->type = $_type;
         $this->mediafile = $_mediafile;
         $this->caption = $_caption;
         $this->parseMode = $_parse_mode ?? ParseModeEnum::HTML();
+        $this->attachMediafileField = $_attach_mediafile_field ?? self::DEFAULT_MEDIAFILE_FIELD;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -78,8 +87,8 @@ class InputMedia
             'media' => $this->mediafile,
         ];
 
-        if ($this->mediafile instanceof \CURLFile) {
-            $arr['media'] = 'attach://' . self::MEDIAFILE_FIELD;
+        if ($this->mediafile instanceof CURLFile) {
+            $arr['media'] = 'attach://' . $this->attachMediafileField;
         }
         if ($this->caption !== null) {
             $arr['caption'] = $this->caption;
@@ -87,6 +96,34 @@ class InputMedia
         }
 
         return $arr;
+    }
+
+    /**
+     * @param array        $_params     Array with query params.
+     * @param string       $_param_name The parameter name in which data will be injected.
+     * @param InputMedia[] $_mediafiles
+     *
+     * @see https://core.telegram.org/bots/api#inputmediaphoto
+     */
+    public static function injectIntoQuery(array &$_params, string $_param_name, InputMedia ...$_mediafiles): void
+    {
+        $mediaJsons = [];
+        foreach ($_mediafiles as $mediafile) {
+            $rawMedia = $mediafile->getMediafile();
+
+            // Inject raw file into the params.
+            if ($rawMedia instanceof CURLFile) {
+                $_params[$mediafile->getAttachMediafileField()] = $rawMedia;
+            }
+
+            // Add mediafile's json to array.
+            $mediaJsons[] = $mediafile->toJson();
+        }
+
+        $_params[$_param_name] = $mediaJsons;
+        if (count($mediaJsons) === 1) {
+            $_params[$_param_name] = $mediaJsons[0];
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -102,7 +139,7 @@ class InputMedia
     }
 
     /**
-     * @return \CURLFile|string
+     * @return CURLFile|string
      */
     public function getMediafile()
     {
@@ -115,6 +152,14 @@ class InputMedia
     public function getCaption(): ?string
     {
         return $this->caption;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttachMediafileField(): string
+    {
+        return $this->attachMediafileField;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -130,7 +175,7 @@ class InputMedia
     }
 
     /**
-     * @param \CURLFile|string $mediafile
+     * @param CURLFile|string $mediafile
      */
     public function setMediafile($mediafile): void
     {
@@ -143,5 +188,13 @@ class InputMedia
     public function setCaption(?string $caption): void
     {
         $this->caption = $caption;
+    }
+
+    /**
+     * @param string $attachMediafileField
+     */
+    public function setAttachMediafileField(string $attachMediafileField): void
+    {
+        $this->attachMediafileField = $attachMediafileField;
     }
 }
