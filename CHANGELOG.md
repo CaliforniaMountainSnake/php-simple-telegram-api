@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [2.0.9] - 2021-03-09
+### Added
+- Added TelegramResponse::__debugInfo() method.
+### Fixed
+- vlucas/phpdotenv dependency has been moved to the require-dev section.
+- SimpleTelegramApiTest has been simplified.
+
 ## [2.0.8] - 2019-12-27
 ### Fixed
 - SimpleTelegramApi::sendMediaGroup() method has been fixed.

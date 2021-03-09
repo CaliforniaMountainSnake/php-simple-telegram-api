@@ -4,6 +4,7 @@ namespace Tests\Feature\Tests;
 
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Exceptions\TelegramWrongResponseException;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\SimpleTelegramApiAuthorized;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Tests\Feature\FeatureTestCase;
 
 class SimpleTelegramApiTest extends FeatureTestCase
@@ -16,19 +17,18 @@ class SimpleTelegramApiTest extends FeatureTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->simpleApi = new SimpleTelegramApiAuthorized(\getenv('BOT_TOKEN'));
+        $this->simpleApi = new SimpleTelegramApiAuthorized(getenv('BOT_TOKEN'));
     }
 
     /**
+     * @throws InvalidArgumentException
      * @throws TelegramWrongResponseException
-     * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      */
-    public function testSendMessage(): void
+    public function testGetMe(): void
     {
-        $arr = $this->simpleApi->sendMessage($this->simpleApi->getBotToken(), '@' . \getenv('TEST_CHANNEL_USERNAME'),
-            'test from lib!');
+        $me = $this->simpleApi->getMe($this->simpleApi->getBotToken());
 
-        $this->assertIsArray($arr);
-        $this->assertArrayHasKey('result', $arr);
+        self::assertTrue($me->isOk());
+        self::assertEquals(1, $me->getResult('is_bot'));
     }
 }

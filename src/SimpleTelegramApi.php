@@ -300,10 +300,11 @@ class SimpleTelegramApi
      *
      * @param string       $_bot_token
      * @param string       $_chat_id
-     * @param InputMedia[] $_mediafiles
+     * @param InputMedia[] $_mediafiles Array describing photos and videos to be sent, must include 2–10 items.
      *
      * @return TelegramResponse
      * @throws TelegramWrongResponseException
+     * @see https://core.telegram.org/bots/api#sendmediagroup
      */
     public function sendMediaGroup(
         string $_bot_token,
