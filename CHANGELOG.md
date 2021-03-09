@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Security
 
 
+## [2.0.10] - 2021-03-09
+### Fixed
+- Fixed vlucas/phpdotenv dependency.
+
 ## [2.0.9] - 2021-03-09
 ### Added
 - Added TelegramResponse::__debugInfo() method.

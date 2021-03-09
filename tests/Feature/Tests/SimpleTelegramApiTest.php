@@ -4,6 +4,9 @@ namespace Tests\Feature\Tests;
 
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\Exceptions\TelegramWrongResponseException;
 use CaliforniaMountainSnake\SocialNetworksAPI\Telegram\SimpleTelegramApiAuthorized;
+use Dotenv\Exception\InvalidEncodingException;
+use Dotenv\Exception\InvalidFileException;
+use Dotenv\Exception\InvalidPathException;
 use SebastianBergmann\RecursionContext\InvalidArgumentException;
 use Tests\Feature\FeatureTestCase;
 
@@ -14,10 +17,15 @@ class SimpleTelegramApiTest extends FeatureTestCase
      */
     protected $simpleApi;
 
+    /**
+     * @throws InvalidEncodingException
+     * @throws InvalidFileException
+     * @throws InvalidPathException
+     */
     public function setUp()
     {
         parent::setUp();
-        $this->simpleApi = new SimpleTelegramApiAuthorized(getenv('BOT_TOKEN'));
+        $this->simpleApi = new SimpleTelegramApiAuthorized($_ENV['BOT_TOKEN']);
     }
 
     /**
